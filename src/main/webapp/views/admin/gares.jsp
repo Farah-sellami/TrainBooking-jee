@@ -3,10 +3,11 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 
 <jsp:include page="/META-INF/jsp/includes/headerAdmin.jsp" />
-<h2>Liste des gares</h2>
+<div class="container">
+    <h1>Gestion des Gares</h1>
 
 <!-- Bouton ajouter une nouvelle gare -->
-<a href="${pageContext.request.contextPath}/GareController?action=new" class="btn btn-add">Ajouter une nouvelle gare</a>
+<a href="${pageContext.request.contextPath}/GareController?action=new"  class="btn" style="background-color: #27ae60; color: white; padding: 5px 10px; text-decoration: none; margin-right: 5px;">Ajouter une nouvelle gare</a>
 <br> <br>
 <table>
     <thead>
@@ -24,9 +25,9 @@
                 <td>${gare.nom}</td>
                  <td>${gare.ville}</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/GareController?action=voir&id=${gare.id}" class="btn btn-view">Voir</a>
-                    <a href="${pageContext.request.contextPath}/GareController?action=edit&id=${gare.id}" class="btn btn-edit">Modifier</a>
-                    <a href="${pageContext.request.contextPath}/GareController?action=delete&id=${gare.id}" class="btn btn-delete" 
+                  
+                    <a href="${pageContext.request.contextPath}/GareController?action=edit&id=${gare.id}" class="btn" style="background-color: #f39c12; color: white; padding: 5px 10px; text-decoration: none;">Modifier</a>
+                    <a href="${pageContext.request.contextPath}/GareController?action=delete&id=${gare.id}" class="btn" style="background-color: #e74c3c; color: white; padding: 5px 10px; text-decoration: none; margin-right: 5px;" 
                        onclick="return confirm('Voulez-vous vraiment supprimer cette gare ?');">Supprimer</a>
                 </td>
             </tr>
@@ -38,6 +39,6 @@
         </c:if>
     </tbody>
 </table>
-
+</div>
 <jsp:include page="/META-INF/jsp/includes/footerAdmin.jsp" />
 

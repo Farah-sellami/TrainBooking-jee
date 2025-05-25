@@ -6,10 +6,6 @@
 <div class="container">
     <h1>Gestion des Utilisateurs</h1>
 
-    <!-- Bouton ajouter un nouvel utilisateur -->
-    <div style="margin-bottom: 20px;">
-        <a href="${pageContext.request.contextPath}/UtilisateurController?action=new" class="btn" style="background-color: #2980b9; color: white;">Ajouter un nouvel utilisateur</a>
-    </div>
 
     <!-- Message de confirmation ou erreur -->
     <c:if test="${not empty message}">

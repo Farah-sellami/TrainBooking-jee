@@ -8,7 +8,7 @@
 
     <!-- Bouton ajouter un nouveau trajet -->
     <div style="margin-bottom: 20px;">
-        <a href="${pageContext.request.contextPath}/TrajetController?action=new" class="btn">Ajouter un nouveau trajet</a>
+        <a href="${pageContext.request.contextPath}/TrajetController?action=new"  class="btn" style="background-color: #27ae60; color: white; padding: 5px 10px; text-decoration: none; margin-right: 5px;">Ajouter un nouveau trajet</a>
 
     </div>
 
@@ -36,8 +36,8 @@
                     <td>${trajet.gareArrivee.nom}</td>
                     <td>${trajet.distanceKm}</td>
                     <td>
-                      <a href="${pageContext.request.contextPath}/TrajetController?action=edit&id=${trajet.id}" class="btn" style="background-color: #27ae60;">Modifier</a>
-                        <a href="${pageContext.request.contextPath}/TrajetController?action=delete&id=${trajet.id}" class="btn" style="background-color: #e74c3c;" 
+                      <a href="${pageContext.request.contextPath}/TrajetController?action=edit&id=${trajet.id}" class="btn" style="background-color: #f39c12; color: white; padding: 5px 10px; text-decoration: none;">Modifier</a>
+                        <a href="${pageContext.request.contextPath}/TrajetController?action=delete&id=${trajet.id}" class="btn" style="background-color: #e74c3c; color: white; padding: 5px 10px; text-decoration: none; margin-right: 5px;" 
                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce trajet ?');">Supprimer
                         </a>
                     </td>
