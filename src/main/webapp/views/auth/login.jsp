@@ -3,14 +3,24 @@
   <title>Connexion</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+  font-family: Arial, sans-serif;
+  background: #f0f2f5;
+  display: flex;
+  flex-direction: column; /* empile verticalement */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  gap: 20px; /* espace entre h1 et container */
+}
+
+h1 {
+  color: #333;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
     .container {
       background: white;
       padding: 30px 40px;
@@ -81,7 +91,9 @@
   </style>
 </head>
 <body>
+<h1>TrainBooking</h1>
   <div class="container">
+  
     <h2>Connexion</h2>
 
     <c:if test="${not empty erreur}">
