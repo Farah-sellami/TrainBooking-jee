@@ -32,4 +32,8 @@ public class BilletService {
     public List<Billet> listerTousLesBillets() {
         return billetDao.listerTous();
     }
+    public List<Billet> trouverBilletsParUtilisateur(Long utilisateurId) {
+        return billetDao.findByUtilisateurId(utilisateurId);
+    }
+
 }

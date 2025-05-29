@@ -54,6 +54,9 @@ public class BilletController extends HttpServlet {
             case "delete":
                 supprimerBillet(request, response);
                 break;
+            case "mes":
+                afficherMesBillets(request, response);
+                break;
             default:
                 listerTousLesBillets(request, response);
                 break;
@@ -75,11 +78,28 @@ public class BilletController extends HttpServlet {
             case "modifier":
                 modifierBillet(request, response);
                 break;
+                
             default:
                 doGet(request, response);
                 break;
         }
     }
+    
+    private void afficherMesBillets(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateur");
+        
+        if (utilisateur == null) {
+            response.sendRedirect("AuthController?action=login");
+            return;
+        }
+
+        List<Billet> billets = billetService.trouverBilletsParUtilisateur(utilisateur.getId());
+        request.setAttribute("reservations", billets);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/mon_espace.jsp");
+        dispatcher.forward(request, response);
+    }
+
 
     private void listerTousLesBillets(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -162,4 +182,20 @@ public class BilletController extends HttpServlet {
         billetService.supprimerBillet(id);
         response.sendRedirect("BilletController?action=list");
     }
+    
+    private void afficherMesBilletsAccueil(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateur");
+
+        if (utilisateur == null) {
+            response.sendRedirect("AuthController?action=login");
+            return;
+        }
+
+        List<Billet> billets = billetService.trouverBilletsParUtilisateur(utilisateur.getId());
+        request.setAttribute("reservations", billets);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/utilisateurs/accueil.jsp");
+        dispatcher.forward(request, response);
+    }
+
 }

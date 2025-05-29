@@ -19,7 +19,7 @@ public class Paiement {
 
     private Date datePaiement;
 
-    private String methodePaiement; // CB, PayPal, etc.
+    private String methodePaiement; // CB,, etc.
 
 	public Long getId() {
 		return id;

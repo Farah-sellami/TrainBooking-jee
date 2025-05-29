@@ -1,12 +1,15 @@
 package dao.impliment;
 
 import dao.interfaces.IBilletDao;
+import jakarta.jms.Connection;
 import model.Billet;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BilletDaoImpl implements IBilletDao {
@@ -86,4 +89,20 @@ public class BilletDaoImpl implements IBilletDao {
             return null;
         }
     }
+    
+    @Override
+    public List<Billet> findByUtilisateurId(Long utilisateurId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Billet> query = session.createQuery(
+                "from Billet b where b.utilisateur.id = :utilisateurId", Billet.class
+            );
+            query.setParameter("utilisateurId", utilisateurId);
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+
 }

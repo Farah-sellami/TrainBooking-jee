@@ -10,4 +10,5 @@ public interface IBilletDao {
     Billet trouverParId(Long id);
     List<Billet> listerParUtilisateur(Long utilisateurId);
     List<Billet> listerTous();
+    List<Billet> findByUtilisateurId(Long utilisateurId);
 }

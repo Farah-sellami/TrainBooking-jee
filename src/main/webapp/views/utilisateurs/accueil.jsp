@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,6 +97,8 @@
             padding: 0.5rem 1rem;
             border-radius: 8px;
             border: none;
+            text-decoration: none;
+            margin-left: 0.5rem;
         }
     </style>
 </head>
@@ -108,14 +109,15 @@
         <span style="font-size: 1.5rem;">👤</span>
         <div>
             <div style="font-weight: bold;">Mon Espace</div>
-            <div style="font-size: 0.9rem; color: #6b7280;">Bienvenue, <c:out value="${sessionScope.utilisateur.nom}" /></div>
+            <div style="font-size: 0.9rem; color: #6b7280;">Bienvenue, 
+                <c:out value="${sessionScope.utilisateur.nom}" />
+            </div>
         </div>
     </div>
-    <form method="post" action="${pageContext.request.contextPath}/AuthController?action=logout">
-    <a class="logout-btn" href="${pageContext.request.contextPath}">Acceuil</a>
-    <a class="logout-btn" href="${pageContext.request.contextPath}/AuthController?action=logout">Déconnexion</a>
-        
-    </form>
+    <div>
+        <a class="logout-btn" href="${pageContext.request.contextPath}">Accueil</a>
+        <a class="logout-btn" href="${pageContext.request.contextPath}/AuthController?action=logout">Déconnexion</a>
+    </div>
 </header>
 
 <div class="tabs">
@@ -126,42 +128,49 @@
 <div class="content">
     <h2>Billets achetés</h2>
 
-    <c:forEach var="res" items="${reservations}">
-        <div class="reservation">
-            <div class="reservation-info">
-                <div>
-                    <div style="font-weight: bold;">${res.train}</div>
-                    <div>${res.depart} → ${res.arrivee}</div>
-                </div>
-                <div>
-                    <div>Date</div>
-                    <div><strong>${res.date}</strong></div>
-                </div>
-                <div>
-                    <div>Horaires</div>
-                    <div><strong>${res.heureDepart} - ${res.heureArrivee}</strong></div>
-                </div>
-                <div>
-                    <div>Classe</div>
-                    <div><strong>${res.classe}</strong></div>
-                </div>
-                <div>
-                    <div>Place</div>
-                    <div><strong>${res.place}</strong></div>
-                </div>
-                <div>
-                    <div style="color: green; font-size: 1.3rem;"><strong>${res.prix}€</strong></div>
-                </div>
-                <div class="status">acheté</div>
-            </div>
+    <c:choose>
+        <c:when test="${not empty reservations}">
+            <c:forEach var="res" items="${reservations}">
+                <div class="reservation">
+                    <div class="reservation-info">
+                        <div>
+                            <div style="font-weight: bold;">Train : ${res.train}</div>
+                            <div>${res.depart} → ${res.arrivee}</div>
+                        </div>
+                        <div>
+                            <div>Date</div>
+                            <div><strong>${res.date}</strong></div>
+                        </div>
+                        <div>
+                            <div>Horaires</div>
+                            <div><strong>${res.heureDepart} - ${res.heureArrivee}</strong></div>
+                        </div>
+                        <div>
+                            <div>Classe</div>
+                            <div><strong>${res.classe}</strong></div>
+                        </div>
+                        <div>
+                            <div>Place</div>
+                            <div><strong>${res.place}</strong></div>
+                        </div>
+                        <div>
+                            <div style="color: green; font-size: 1.3rem;"><strong>${res.prix}€</strong></div>
+                        </div>
+                        <div class="status">Acheté</div>
+                    </div>
 
-            <div style="margin-top: 0.5rem;">
-                <button class="btn btn-modifier">✏️ Modifier</button>
-                <button class="btn btn-pdf">⬇️ PDF</button>
-                <button class="btn btn-annuler">❌ Annuler</button>
-            </div>
-        </div>
-    </c:forEach>
+                    <div style="margin-top: 0.5rem;">
+                        <button class="btn btn-modifier">✏️ Modifier</button>
+                        <button class="btn btn-pdf">⬇️ PDF</button>
+                        <button class="btn btn-annuler">❌ Annuler</button>
+                    </div>
+                </div>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <p style="text-align: center;">Vous n'avez aucune billets pour le moment.</p>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 </body>

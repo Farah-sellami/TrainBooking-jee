@@ -107,6 +107,9 @@
       if(id === 'modal-success') {
         window.location.href = 'http://localhost:8081/Maven-projet/views/utilisateurs/accueil.jsp';
       }
+      else{
+    	  window.location.href = 'http://localhost:8081/Maven-projet/views/recherche/rechercheTrajets.jsp';
+      }
     }, 300);
   }
 
