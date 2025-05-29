@@ -227,13 +227,18 @@
 </head>
 <body>
 
-<header>
-    <div class="logo">TrainBooking</div>
-    <div class="actions">
-        <a href="${pageContext.request.contextPath}/AuthController">Connexion</a>
-        <a href="${pageContext.request.contextPath}/AuthController">Inscription</a>
-    </div>
-</header>
+<div class="actions">
+    <c:choose>
+        <c:when test="${not empty sessionScope.utilisateurConnecte}">
+            <a href="${pageContext.request.contextPath}/AuthController?action=logout">Déconnexion</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/AuthController?action=login">Connexion</a>
+            <a href="${pageContext.request.contextPath}/AuthController?action=register">Inscription</a>
+        </c:otherwise>
+    </c:choose>
+</div>
+
 
 <section class="hero">
     <h1>Voyagez en toute <span>simplicité</span></h1>

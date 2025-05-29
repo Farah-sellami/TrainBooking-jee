@@ -59,58 +59,87 @@ public class PaiementController extends HttpServlet {
     
     private void validerPaiement(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         try {
-            Long voyageId = Long.parseLong(request.getParameter("voyageId"));
+            String voyageIdStr = request.getParameter("voyageId");
             String methodePaiement = request.getParameter("methodePaiement");
+            String classe = request.getParameter("classe");
+            String preference = request.getParameter("preference");
 
-            // ⚠️ Vérifie que l'utilisateur est connecté
+            System.out.println("validerPaiement params: voyageId=" + voyageIdStr + ", methodePaiement=" + methodePaiement +
+                               ", classe=" + classe + ", preference=" + preference);
+
+            if (voyageIdStr == null || voyageIdStr.isEmpty()) {
+                throw new IllegalArgumentException("voyageId manquant");
+            }
+            Long voyageId = Long.parseLong(voyageIdStr);
+
             Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("utilisateurConnecte");
+            System.out.println("Utilisateur connecté: " + (utilisateur != null ? utilisateur.getId() : "null"));
             if (utilisateur == null) {
-            	//response.sendRedirect(request.getContextPath() + "/views/auth/login.jsp");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/views/auth/login.jsp");
-                dispatcher.forward(request, response);
+                request.setAttribute("paiementStatus", "error");
+                request.setAttribute("messageErreur", "Veuillez vous connecter pour effectuer un paiement.");
+                request.getRequestDispatcher("/views/utilisateurs/formulairePaiement.jsp").forward(request, response);
                 return;
             }
 
-            // 🔍 Récupère les services nécessaires
             VoyageService voyageService = new VoyageService();
             BilletService billetService = new BilletService();
             Voyage voyage = voyageService.trouverVoyageParId(voyageId);
 
-            if (voyage == null || voyage.getNombrePlaces() <= 0) {
-                request.setAttribute("messageErreur", "Le voyage est complet ou introuvable.");
-                request.getRequestDispatcher("erreurPaiement.jsp").forward(request, response);
+            if (voyage == null) {
+                request.setAttribute("paiementStatus", "error");
+                request.setAttribute("messageErreur", "Voyage introuvable.");
+                request.getRequestDispatcher("/views/utilisateurs/formulairePaiement.jsp").forward(request, response);
                 return;
             }
+            if (voyage.getNombrePlaces() <= 0) {
+                request.setAttribute("paiementStatus", "error");
+                request.setAttribute("messageErreur", "Le voyage est complet.");
+                request.getRequestDispatcher("/views/utilisateurs/formulairePaiement.jsp").forward(request, response);
+                return;
+            }        
 
-            // 📄 Création du billet
+            // Création du billet
             Billet billet = new Billet();
             billet.setUtilisateur(utilisateur);
             billet.setVoyage(voyage);
-            billet.setNumeroBillet("BIL" + System.currentTimeMillis()); // Numéro unique
+            billet.setNumeroBillet("BIL" + System.currentTimeMillis());
             billet.setEstValide(true);
             billetService.ajouterBillet(billet);
 
-            // 💰 Création du paiement
+            // Calcul du prix final
+            double montantFinal = voyage.getPrix();
+            if ("Première".equalsIgnoreCase(classe)) {
+                montantFinal *= 1.20;
+            }
+
+            // Création du paiement
             Paiement paiement = new Paiement();
             paiement.setBillet(billet);
-            paiement.setMontant(voyage.getPrix());
+            paiement.setMontant(montantFinal);
             paiement.setDatePaiement(new java.sql.Date(System.currentTimeMillis()));
             paiement.setMethodePaiement(methodePaiement);
             paiementService.ajouterPaiement(paiement);
 
-            // 🎯 Mettre à jour le nombre de places
+            // Mise à jour du voyage
             voyage.setNombrePlaces(voyage.getNombrePlaces() - 1);
             voyageService.modifierVoyage(voyage);
 
+            // Succès
+            request.setAttribute("paiementStatus", "success");
             request.setAttribute("paiement", paiement);
-            request.getRequestDispatcher("/views/utilisateurs/paiementReussi.jsp").forward(request, response);
-
+            request.getRequestDispatcher("/views/utilisateurs/formulairePaiement.jsp").forward(request, response);
+            
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+            request.setAttribute("paiementStatus", "error");
+            request.setAttribute("messageErreur", "Identifiant de voyage invalide.");
+            request.getRequestDispatcher("/views/utilisateurs/formulairePaiement.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("messageErreur", "Erreur lors de la validation du paiement.");
-            request.getRequestDispatcher("/views/utilisateurs/erreurPaiement.jsp").forward(request, response);
+            request.setAttribute("paiementStatus", "error");
+            request.setAttribute("messageErreur", "Une erreur est survenue lors du paiement.");
+            request.getRequestDispatcher("/views/utilisateurs/formulairePaiement.jsp").forward(request, response);
         }
     }
 

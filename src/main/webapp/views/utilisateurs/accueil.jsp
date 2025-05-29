@@ -112,8 +112,8 @@
         </div>
     </div>
     <form method="post" action="${pageContext.request.contextPath}/AuthController?action=logout">
-      
-             <a class="logout-btn" href="${pageContext.request.contextPath}/AuthController?action=logout">Déconnexion</a>
+    <a class="logout-btn" href="${pageContext.request.contextPath}">Acceuil</a>
+    <a class="logout-btn" href="${pageContext.request.contextPath}/AuthController?action=logout">Déconnexion</a>
         
     </form>
 </header>
